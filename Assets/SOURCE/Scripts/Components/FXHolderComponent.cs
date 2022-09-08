@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class FXHolderComponent : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem runFX;
+    [SerializeField] private ParticleSystem deathFX;
+    [SerializeField] private ParticleSystem hitFX;
 
-    public ParticleSystem RunFX => runFX;
+    public ParticleSystem DeathFX => deathFX;
+    public ParticleSystem HitFX => hitFX;
 }

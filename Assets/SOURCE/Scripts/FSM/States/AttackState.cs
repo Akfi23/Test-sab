@@ -7,7 +7,9 @@ public class AttackState : CharacterState
 {
     public override void OnStateEnter(MonsterComponent monster)
     {
-        monster.Agent.ResetPath();
+        if(monster.Agent.enabled)
+            monster.Agent.ResetPath();
+
         monster.Animator.SetBool("IsMove", false);
         monster.SetAttackStatusFalse();
         monster.timer = 0;

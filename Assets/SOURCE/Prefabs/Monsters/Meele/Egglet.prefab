@@ -427,6 +427,9 @@ GameObject:
   - component: {fileID: 395191154893983959}
   - component: {fileID: 395191154893983953}
   - component: {fileID: 395191154893983958}
+  - component: {fileID: 3788320308990655627}
+  - component: {fileID: 871681280414627370}
+  - component: {fileID: 3420516977568014397}
   m_Layer: 6
   m_Name: Egglet
   m_TagString: Untagged
@@ -540,8 +543,6 @@ MonoBehaviour:
   cell: {fileID: 0}
   canvas: {fileID: 2424114833316444036}
   hpBar: {fileID: 8766805409053176226}
-  dieVFX: {fileID: 0}
-  hitVFX: {fileID: 0}
   levelText: {fileID: 3782772595089846821}
   isDie: 0
   timer: 0
@@ -565,6 +566,44 @@ MonoBehaviour:
   monster: {fileID: 395191154893983953}
   initialState: 1
   currentState: {fileID: 0}
+--- !u!114 &3788320308990655627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845446858646066330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7b6a94a6ff53942b9886dd94e1ce3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &871681280414627370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845446858646066330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4effe12c53d100545af4071143f366ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathFX: {fileID: 0}
+  hitFX: {fileID: 0}
+--- !u!114 &3420516977568014397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845446858646066330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d72d74867f09ca041968f1ca3b11d1d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7845446858646066332
 GameObject:
   m_ObjectHideFlags: 0

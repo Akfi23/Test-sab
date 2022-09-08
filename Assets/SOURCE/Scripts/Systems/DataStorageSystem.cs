@@ -17,14 +17,20 @@ public class DataStorageSystem : GameSystem
         Bootstrap.Instance.SaveGame();
     }
 
+    //public override void OnGameEnd()
+    //{
+    //    SaveMonsterData();
+    //}
+
     private void SaveMonsterData()
     {
         if (game.PlayerMonsters.Count > 0)
         {
             player.MonsterDatas.Clear();
+
             foreach (var monster in game.PlayerMonsters)
             {
-                var newData = new MonsterData(monster.AttackType, monster.EvolveIndex,monster.Cell.Index);
+                var newData = new MonsterData(monster.AttackType, monster.EvolveIndex, monster.Cell.Index);
                 player.MonsterDatas.Add(newData);
             }
         }

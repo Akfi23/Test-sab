@@ -21,14 +21,12 @@ namespace Kuhpik
         [HorizontalLine(color: EColor.Orange)]
         public CinemachineVirtualCamera GameCamera;
 
-        [Header("Level")]
-        [HorizontalLine(color: EColor.Green)]
-        public List<OpenableQuadComponent> Quads = new List<OpenableQuadComponent>();
-
         [Header("Merge")]
         [HorizontalLine(color: EColor.Violet)]
         public MonsterComponent SelectedMonster;
         public List<CellComponent> Cells = new List<CellComponent>();
+        public List<CellComponent> PlayerCells = new List<CellComponent>();
+        public List<CellComponent> EnemyCells = new List<CellComponent>();
 
         [Header("Battle Stuff")]
         [HorizontalLine(color: EColor.Pink)]

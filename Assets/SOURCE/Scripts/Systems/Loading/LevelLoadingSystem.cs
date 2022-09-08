@@ -11,12 +11,27 @@ public class LevelLoadingSystem : GameSystem
     {
         Signals.Clear();
         Application.targetFrameRate = 120;
+
         game.BattleField = FindObjectOfType<BattleFieldComponent>();
-        game.Cells = FindObjectsOfType<CellComponent>().ToList();
+        FindAndCompareCells();
+    }
+
+    private void FindAndCompareCells()
+    {
+        game.Cells = game.BattleField.GetComponentsInChildren<CellComponent>().ToList();
 
         for (int i = 0; i < game.Cells.Count; i++)
         {
             game.Cells[i].SetIndex((i + 1));
+
+            if (game.Cells[i].CellOwner == Owner.Player)
+            {
+                game.PlayerCells.Add(game.Cells[i]);
+            }
+            else 
+            {
+                game.EnemyCells.Add(game.Cells[i]);
+            }
         }
     }
 }

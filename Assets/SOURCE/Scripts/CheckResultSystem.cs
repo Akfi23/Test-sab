@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Kuhpik;
+using Supyrb;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,17 +13,11 @@ public class CheckResultSystem : GameSystemWithScreen<ResultScreen>
     {
         screen.ContinueButton.onClick.AddListener(QuitBattle);
         cartoonMask = UIManager.GetUIScreen<CartoonMaskScreen>();
-    }
-
-    public override void OnStateEnter()
-    {
         SetBattleResult();
     }
 
     private void SetBattleResult()
     {
-        screen.ContinueButton.interactable = true;
-
         if (game.isWin)
         {
             screen.ResultText.text = "WIN";
@@ -43,36 +38,14 @@ public class CheckResultSystem : GameSystemWithScreen<ResultScreen>
     {
         screen.ContinueButton.interactable = false;
         player.Money += game.PrizeCount;
-        game.PrizeCount = 0;
         cartoonMask.ZoomInMask();
         StartCoroutine(QuitRoutine());
     }
 
     private IEnumerator QuitRoutine()
     {
-        ClearEnemeyList();
-
+        Signals.Get<OnAppQuitSignal>().Dispatch();
         yield return new WaitForSeconds(0.8f);
-
-        foreach (var monster in game.PlayerMonsters)
-        {
-            monster.RenewStats();
-        }
-
-        Bootstrap.Instance.ChangeGameState(GameStateID.Merge);
-    }
-
-    private void ClearEnemeyList()
-    {
-        if (game.EnemyMonsters.Count > 0)
-        {
-            foreach (var monster in game.PlayerMonsters)
-            {
-                monster.Agent.enabled = false;
-                monster.transform.forward = Vector3.zero;
-            }
-
-            game.EnemyMonsters.Clear();
-        }
+        Bootstrap.Instance.GameRestart(0);
     }
 }

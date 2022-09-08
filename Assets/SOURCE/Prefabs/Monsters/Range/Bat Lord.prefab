@@ -1316,8 +1316,6 @@ MonoBehaviour:
   cell: {fileID: 0}
   canvas: {fileID: 2981732018475837819}
   hpBar: {fileID: 8173155861115154269}
-  dieVFX: {fileID: 0}
-  hitVFX: {fileID: 0}
   levelText: {fileID: 7410809996975040956}
   isDie: 0
   timer: 0

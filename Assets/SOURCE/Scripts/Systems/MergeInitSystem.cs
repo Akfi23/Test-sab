@@ -5,10 +5,17 @@ using UnityEngine;
 
 public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
 {
-    [SerializeField] private List<CellComponent> playerCells = new List<CellComponent>();
-    [SerializeField] private List<CellComponent> enemyCells = new List<CellComponent>();
-
     public override void OnStateEnter()
+    {
+        TryGetMonstersBySave();
+        CreateEnemyMonsters();
+
+        screen.ZoomOutMask();
+        game.BattleField.FightZone.gameObject.SetActive(false);
+        game.BattleField.FightZone.localScale = Vector3.one * 0.35f;
+    }
+
+    private void TryGetMonstersBySave()
     {
         if (game.PlayerMonsters.Count <= 0)
         {
@@ -18,56 +25,25 @@ public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
             }
             else
             {
-                MonsterComponent newPlayerMonsterM = Instantiate(config.Melee[0], playerCells[0].transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
-                MonsterComponent newPlayerMonsterR = Instantiate(config.Range[0], playerCells[1].transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
+                MonsterComponent newPlayerMonsterM = Instantiate(config.Melee[0], game.PlayerCells[0].transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
+                MonsterComponent newPlayerMonsterR = Instantiate(config.Range[0], game.PlayerCells[1].transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
                 newPlayerMonsterM.SetOwner(Owner.Player);
-                newPlayerMonsterM.SetCell(playerCells[0]);
+                newPlayerMonsterM.SetCell(game.PlayerCells[0]);
                 newPlayerMonsterR.SetOwner(Owner.Player);
-                newPlayerMonsterR.SetCell(playerCells[1]);
+                newPlayerMonsterR.SetCell(game.PlayerCells[1]);
 
                 game.PlayerMonsters.Add(newPlayerMonsterR);
                 game.PlayerMonsters.Add(newPlayerMonsterM);
-
-            }
-        }
-        else
-        {
-            foreach (var monster in game.PlayerMonsters)
-            {
-                monster.transform.position = monster.Cell.transform.position;
-                monster.gameObject.SetActive(true);
-                monster.LevelText.gameObject.SetActive(true);
-            }
-        }
-
-        screen.ZoomOutMask();
-        game.BattleField.FightZone.gameObject.SetActive(false);
-        game.BattleField.FightZone.localScale = Vector3.one * 0.35f;
-    }
-
-    public override void OnInit()
-    {
-        foreach (var cell in game.Cells)
-        {
-            if (cell.CellOwner == Owner.Enemy)
-            {
-                enemyCells.Add(cell);
-            }
-            else
-            {
-                playerCells.Add(cell);
             }
         }
     }
 
     private void CreatePlayerMonstersBySave()
     {
-        int i = 0;
-
         foreach (var monster in player.MonsterDatas)
         {
             MonsterComponent newPlayerMonster;
-            CellComponent cell = game.Cells.Find(x => x.Index == monster.Cell);
+            CellComponent cell = game.PlayerCells.Find(x => x.Index == monster.Cell);
 
             if (monster.Type == AttackType.Melee)
             {
@@ -82,34 +58,30 @@ public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
             newPlayerMonster.SetCell(cell);
             newPlayerMonster.Agent.Warp(cell.transform.position);
             game.PlayerMonsters.Add(newPlayerMonster);
-            i++;
         }
 
         player.MonsterDatas.Clear();
     }
 
-    private void CreateMonsters(Owner owner)
+    private void CreateEnemyMonsters()
     {
         MonsterComponent newMonster;
 
+        int counter = Random.Range(1, 2);
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < counter; i++)
         {
-            if (i <= 2 / 2)
-            {
-                CellComponent cell = enemyCells[i];
-                newMonster = Instantiate(config.Range[1], cell.transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
-                newMonster.SetOwner(Owner.Enemy);
-                newMonster.SetCell(cell);
-            }
-            else
-            {
-                CellComponent cell = enemyCells[i];
-                newMonster = Instantiate(config.Melee[1], cell.transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
-                newMonster.SetOwner(Owner.Enemy);
-                newMonster.SetCell(cell);
-            }
-        }
+            int evolveIndex = counter + Random.Range(0, 1);
+            CellComponent cell = game.EnemyCells[i];
 
+            if (i <= counter / 2)
+                newMonster = Instantiate(config.Range[evolveIndex], cell.transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
+            else
+                newMonster = Instantiate(config.Melee[evolveIndex], cell.transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
+
+
+            newMonster.SetOwner(Owner.Enemy);
+            newMonster.SetCell(cell);
+        }
     }
 }

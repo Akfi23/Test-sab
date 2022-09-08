@@ -43,12 +43,12 @@ public class BuyNewMonsterSystem : GameSystemWithScreen<MergeScreen>
 
                 if (type == AttackType.Melee)
                 {
-                    newPlayerMonster = Instantiate(config.Melee[0], cell.transform.position, config.Range[0].transform.rotation, game.BattleField.transform);
+                    newPlayerMonster = Instantiate(config.Melee[0], cell.transform.position, config.Melee[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
                     player.MeleePurchasedCount++;
                 }
                 else
                 {
-                    newPlayerMonster = Instantiate(config.Range[0], cell.transform.position, config.Range[0].transform.rotation, game.BattleField.transform);
+                    newPlayerMonster = Instantiate(config.Range[0], cell.transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
                     player.RangePurchasedCount++;
                 }
 
@@ -58,7 +58,7 @@ public class BuyNewMonsterSystem : GameSystemWithScreen<MergeScreen>
                 newPlayerMonster.SetOwner(Owner.Player);
 
                 player.Money -= buyButton.Price;
-
+                screen.UpdateMoneyText(player.Money);
                 SetButtonPrice();
 
                 buyButton.transform.DOScale(Vector3.one*1.1f,0.1f).SetEase(Ease.OutQuad).SetLoops(2,LoopType.Yoyo).OnComplete(()=>buyButton.isTouched=false);

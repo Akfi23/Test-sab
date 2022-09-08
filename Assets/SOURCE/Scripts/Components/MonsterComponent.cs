@@ -36,8 +36,8 @@ public class MonsterComponent : MonoBehaviour
     [SerializeField] private CellComponent cell;
     [SerializeField] Canvas canvas;
     [SerializeField] Image hpBar;
-    [SerializeField] private ParticleSystem dieVFX;
-    [SerializeField] private ParticleSystem hitVFX;
+    //[SerializeField] private ParticleSystem dieVFX;
+    //[SerializeField] private ParticleSystem hitVFX;
     [SerializeField] private TMP_Text levelText;
 
     public bool isDie;
@@ -59,6 +59,11 @@ public class MonsterComponent : MonoBehaviour
     public CellComponent Cell => cell;
     public Image HPBar => hpBar;
     public TMP_Text LevelText => levelText;
+
+    public void Init()
+    {
+        
+    }
 
     public void RenewStats()
     {
@@ -116,7 +121,7 @@ public class MonsterComponent : MonoBehaviour
     {
         if (isDie) return;
 
-        hitVFX.Play();
+        //hitVFX.Play();
         StartCoroutine(HPBarRoutine());
         currentHealth-=damage;
 
@@ -136,7 +141,7 @@ public class MonsterComponent : MonoBehaviour
         if(agent.enabled)
             agent.ResetPath();
 
-        dieVFX.Play();
+        //dieVFX.Play();
         canvas.gameObject.SetActive(false);
         Signals.Get<OnMonsterDie>().Dispatch(this,killer);
         animator.SetTrigger("IsDie");
