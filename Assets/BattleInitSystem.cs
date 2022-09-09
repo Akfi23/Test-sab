@@ -19,7 +19,7 @@ public class BattleInitSystem : GameSystem
 
         foreach (var monster in monsters)
         {
-            monster.LevelText.gameObject.SetActive(false);
+            monster.HUDComponent.LevelText.gameObject.SetActive(false);
 
             if (monster.Owner == Owner.Player)
             {
@@ -37,10 +37,9 @@ public class BattleInitSystem : GameSystem
     private void PrepareMonsterToBattle(MonsterComponent monsterComponent)
     {
         monsterComponent.FSMCOmponent.Init(game);
-        monsterComponent.RenewStats();
         monsterComponent.FSMCOmponent.SetState(StateType.FindTarget);
 
         if(monsterComponent.Owner==Owner.Player)
-            monsterComponent.HPBar.color = config.PlayerHPColor;
+            monsterComponent.HUDComponent.HPBar.color = config.PlayerHPColor;
     }
 }

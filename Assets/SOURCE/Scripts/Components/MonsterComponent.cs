@@ -15,66 +15,50 @@ public enum AttackType
 
 public class MonsterComponent : MonoBehaviour
 {
-    [Header("Attributes")]
-    [SerializeField] private int evolveIndex;
-    [SerializeField] private int health;
-    [SerializeField] private int damage;
+    [Header("Values")]
     [SerializeField] private int currentHealth;
-    [Header("Types")]
-    [SerializeField] private AttackType attackType;
+    [Header("CurrentOwner")]
     [SerializeField] private Owner owner;
     [Header("Components")]
+    [SerializeField] private MonsterConfig config;
     [SerializeField] private Collider coll;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private MonsterFSMComponent fsmComponent;
-    [SerializeField] private Animator animator;
+    [SerializeField] private AnimatorComponent animator;
+    [SerializeField] private HUDComponent hudComponent;
+    [SerializeField] private FXHolderComponent fxHolder;
     [Header("AttackStuff")]
     [SerializeField] private MonsterComponent targetMonster;
-    [SerializeField] private float attackRange;
     [SerializeField] private Transform projectile;
     [SerializeField] private bool isAttack;
     [SerializeField] private CellComponent cell;
-    [SerializeField] Canvas canvas;
-    [SerializeField] Image hpBar;
-    //[SerializeField] private ParticleSystem dieVFX;
-    //[SerializeField] private ParticleSystem hitVFX;
-    [SerializeField] private TMP_Text levelText;
 
     public bool isDie;
 
     public float timer;
-    public int EvolveIndex => evolveIndex;
-    public int Health => health;
-    public AttackType AttackType => attackType;
+    public MonsterConfig Config => config;
     public Owner Owner => owner;
     public Collider Collider => coll;
     public NavMeshAgent Agent => agent;
     public MonsterComponent TargetMonster => targetMonster;
     public MonsterFSMComponent FSMCOmponent => fsmComponent;
-    public float AttackRange => attackRange;
     public Transform Projectile => projectile;
     public bool IsAttack => isAttack;
-    public Animator Animator => animator;
-    public int Damage => damage;
+    public AnimatorComponent Animator => animator;
     public CellComponent Cell => cell;
-    public Image HPBar => hpBar;
-    public TMP_Text LevelText => levelText;
+    public HUDComponent HUDComponent => hudComponent;
 
     public void Init()
     {
-        
-    }
+        coll = GetComponent<Collider>();
+        agent = GetComponent<NavMeshAgent>();
+        fsmComponent = GetComponent<MonsterFSMComponent>();
+        animator = GetComponent<AnimatorComponent>();
+        animator.InitAnimator();
+        fxHolder = GetComponent<FXHolderComponent>();
+        hudComponent = GetComponent<HUDComponent>();
 
-    public void RenewStats()
-    {
-        currentHealth = health;
-        FSMCOmponent.SetState(StateType.Idle);
-        isDie = false;
-        isAttack = false;
-        targetMonster = null;
-
-        if (projectile != null)
-            projectile.gameObject.SetActive(false);
+        currentHealth = config.MaxHealth;
     }
 
     public void SetAttackStatusFalse()
@@ -112,7 +96,7 @@ public class MonsterComponent : MonoBehaviour
     {
         if (targetMonster != null)
         {
-            targetMonster.TakeDamage(damage,this);
+            targetMonster.TakeDamage(config.Damage,this);
             isAttack = false;
         }
     }
@@ -121,8 +105,8 @@ public class MonsterComponent : MonoBehaviour
     {
         if (isDie) return;
 
-        //hitVFX.Play();
-        StartCoroutine(HPBarRoutine());
+        fxHolder.HitFX.Play();
+        hudComponent.StartHUDRoutine(config.MaxHealth,currentHealth);
         currentHealth-=damage;
 
         if (currentHealth <= 0)
@@ -136,31 +120,19 @@ public class MonsterComponent : MonoBehaviour
         if (isDie) return;
 
         if (projectile != null)
+        {
             projectile.transform.DOKill();
+            projectile.gameObject.SetActive(false);
+        }
 
         if(agent.enabled)
             agent.ResetPath();
 
-        //dieVFX.Play();
-        canvas.gameObject.SetActive(false);
+        fxHolder.DeathFX.Play();
+        hudComponent.HUD.gameObject.SetActive(false);
         Signals.Get<OnMonsterDie>().Dispatch(this,killer);
-        animator.SetTrigger("IsDie");
+        animator.SetDieState();
         fsmComponent.SetState(StateType.Idle);
-    }
-
-    IEnumerator HPBarRoutine()
-    {
-        canvas.gameObject.SetActive(true);
-        hpBar.fillAmount = 1f / health * currentHealth;
-
-        float t = Time.time;
-        while (Time.time < t + 1) 
-        {
-            canvas.transform.localRotation = Quaternion.Euler(-transform.localRotation.eulerAngles);
-            yield return null;
-        }
-        
-        canvas.gameObject.SetActive(false);
     }
 
     public void Attack()
@@ -169,11 +141,11 @@ public class MonsterComponent : MonoBehaviour
 
         isAttack = true;
 
-        if (attackType == AttackType.Range)
+        if (config.AttackType == AttackType.Range)
         {
             projectile.transform.localPosition = Vector3.zero;
 
-            animator.SetTrigger("IsAttack");
+            animator.SetAttackState(true);
             projectile.gameObject.SetActive(true);
 
             projectile.DOJump(targetMonster.transform.position+Vector3.up*1f,2,1,0.65f).OnComplete(()=>
@@ -184,7 +156,7 @@ public class MonsterComponent : MonoBehaviour
         }
         else
         {
-            animator.SetTrigger("IsAttack");
+            animator.SetAttackState(true);
         }
     }
 }

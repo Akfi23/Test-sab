@@ -41,9 +41,9 @@ public class DragSystem : GameSystem
             {
                 if (game.SelectedMonster != null)
                 {
-                    if (game.SelectedMonster.EvolveIndex == monster.EvolveIndex && game.SelectedMonster.AttackType==monster.AttackType)
+                    if (game.SelectedMonster.Config.EvolveIndex == monster.Config.EvolveIndex && game.SelectedMonster.Config.AttackType==monster.Config.AttackType)
                     {
-                        if (game.SelectedMonster.EvolveIndex < config.Melee.Count - 1)
+                        if (game.SelectedMonster.Config.EvolveIndex < config.Melee.Count - 1)
                         {
                             mergeSignal.Dispatch(monster);
                         }

@@ -9,7 +9,7 @@ public class AnimatorComponent : MonoBehaviour
 
     private int DieHash = Animator.StringToHash("IsDie");
     private int AttackHash = Animator.StringToHash("IsAttack");
-    private int MoveHash = Animator.StringToHash("IsMoving");
+    private int MoveHash = Animator.StringToHash("IsMove");
     public void InitAnimator()
     {
         animator = GetComponent<Animator>();
@@ -20,12 +20,9 @@ public class AnimatorComponent : MonoBehaviour
         animator.SetBool(MoveHash, status);
     }
 
-    public void SetDieState(bool status)
+    public void SetDieState()
     {
-        if (status)
-            animator.SetTrigger(DieHash);
-        else
-            animator.ResetTrigger(DieHash);
+        animator.SetTrigger(DieHash);
     }
 
     public void SetAttackState(bool status)

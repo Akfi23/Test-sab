@@ -24,13 +24,13 @@ public class MergeSystem : GameSystem
         mergeFX.transform.position = monster.transform.position;
         mergeFX.Play();
 
-        if (monster.AttackType == AttackType.Melee)
+        if (monster.Config.AttackType == AttackType.Melee)
         {
-            evolvedMonster = Instantiate(config.Melee[monster.EvolveIndex + 1],monster.transform.position, monster.transform.rotation, game.BattleField.transform);
+            evolvedMonster = Instantiate(config.Melee[monster.Config.EvolveIndex + 1],monster.transform.position, monster.transform.rotation, game.BattleField.transform);
         }
         else
         {
-            evolvedMonster = Instantiate(config.Range[monster.EvolveIndex + 1], monster.transform.position, monster.transform.rotation, game.BattleField.transform);
+            evolvedMonster = Instantiate(config.Range[monster.Config.EvolveIndex + 1], monster.transform.position, monster.transform.rotation, game.BattleField.transform);
         }
 
         if (game.PlayerMonsters.Count > 0)
@@ -45,6 +45,7 @@ public class MergeSystem : GameSystem
         evolvedMonster.transform.position = monster.transform.position;
         evolvedMonster.SetOwner(Owner.Player);
         evolvedMonster.SetCell(monster.Cell);
+        evolvedMonster.Init();
 
         Destroy(game.SelectedMonster.gameObject);
         Destroy(monster.gameObject);

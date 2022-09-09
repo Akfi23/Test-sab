@@ -56,6 +56,7 @@ public class BuyNewMonsterSystem : GameSystemWithScreen<MergeScreen>
                 bornVFX.Play();
                 newPlayerMonster.SetCell(cell);
                 newPlayerMonster.SetOwner(Owner.Player);
+                newPlayerMonster.Init();
 
                 player.Money -= buyButton.Price;
                 screen.UpdateMoneyText(player.Money);

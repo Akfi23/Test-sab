@@ -10,7 +10,7 @@ public class ChaseState : CharacterState
         if (monster.TargetMonster != null)
         {
             monster.Agent.SetDestination(monster.TargetMonster.transform.position);
-            monster.Animator.SetBool("IsMove", true);
+            monster.Animator.SetMoveState(true);
         }
         else
         {
@@ -28,7 +28,7 @@ public class ChaseState : CharacterState
         {
             monster.transform.LookAt(monster.TargetMonster.transform);
 
-            if (Vector3.Distance(monster.transform.position, monster.TargetMonster.transform.position) < monster.AttackRange)
+            if (Vector3.Distance(monster.transform.position, monster.TargetMonster.transform.position) < monster.Config.AttackRange)
             {
                 monster.FSMCOmponent.SetState(StateType.Attack);
             }

@@ -30,7 +30,7 @@ public class DataStorageSystem : GameSystem
 
             foreach (var monster in game.PlayerMonsters)
             {
-                var newData = new MonsterData(monster.AttackType, monster.EvolveIndex, monster.Cell.Index);
+                var newData = new MonsterData(monster.Config.AttackType, monster.Config.EvolveIndex, monster.Cell.Index);
                 player.MonsterDatas.Add(newData);
             }
         }

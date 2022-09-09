@@ -26,7 +26,7 @@ public class BattleProgerssionSystem : GameSystem
 
         foreach (var monster in monsters)
         {
-            monster.LevelText.gameObject.SetActive(false);
+            monster.HUDComponent.LevelText.gameObject.SetActive(false);
             if (monster.Owner == Owner.Player)
             {
                 game.PlayerMonsters.Add(monster);
@@ -45,8 +45,7 @@ public class BattleProgerssionSystem : GameSystem
         foreach (var monster in game.PlayerMonsters)
         {
             monster.Agent.enabled = true;
-            monster.RenewStats();
-            monster.HPBar.color = config.PlayerHPColor;
+            monster.HUDComponent.HPBar.color = config.PlayerHPColor;
             monster.FSMCOmponent.SetState(StateType.FindTarget);
         }
 
@@ -75,7 +74,7 @@ public class BattleProgerssionSystem : GameSystem
         }
         else
         {
-            game.PrizeCount += victim.Health;
+            game.PrizeCount += victim.Config.MaxHealth;
             game.EnemyMonsters.Remove(victim);
         }
 
@@ -106,7 +105,7 @@ public class BattleProgerssionSystem : GameSystem
         foreach (var monster in game.PlayerMonsters)
         {
             monster.FSMCOmponent.SetState(StateType.Idle);
-            monster.Animator.SetBool("IsMove", false);
+            monster.Animator.SetMoveState(false);
             monster.Agent.enabled = false;
         }
 

@@ -29,8 +29,10 @@ public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
                 MonsterComponent newPlayerMonsterR = Instantiate(config.Range[0], game.PlayerCells[1].transform.position, config.Range[0].transform.rotation * Quaternion.Euler(0, 180, 0), game.BattleField.transform);
                 newPlayerMonsterM.SetOwner(Owner.Player);
                 newPlayerMonsterM.SetCell(game.PlayerCells[0]);
+                newPlayerMonsterM.Init();
                 newPlayerMonsterR.SetOwner(Owner.Player);
                 newPlayerMonsterR.SetCell(game.PlayerCells[1]);
+                newPlayerMonsterR.Init();
 
                 game.PlayerMonsters.Add(newPlayerMonsterR);
                 game.PlayerMonsters.Add(newPlayerMonsterM);
@@ -57,6 +59,7 @@ public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
             newPlayerMonster.SetOwner(Owner.Player);
             newPlayerMonster.SetCell(cell);
             newPlayerMonster.Agent.Warp(cell.transform.position);
+            newPlayerMonster.Init();
             game.PlayerMonsters.Add(newPlayerMonster);
         }
 
@@ -67,11 +70,11 @@ public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
     {
         MonsterComponent newMonster;
 
-        int counter = Random.Range(1, 2);
+        int counter = Random.Range(1, 4);
 
         for (int i = 0; i < counter; i++)
         {
-            int evolveIndex = counter + Random.Range(0, 1);
+            int evolveIndex = Random.Range(0, counter);
             CellComponent cell = game.EnemyCells[i];
 
             if (i <= counter / 2)
@@ -82,6 +85,7 @@ public class MergeInitSystem : GameSystemWithScreen<CartoonMaskScreen>
 
             newMonster.SetOwner(Owner.Enemy);
             newMonster.SetCell(cell);
+            newMonster.Init();
         }
     }
 }
